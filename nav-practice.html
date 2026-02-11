@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адаптивная навигация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 40px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        
+        .nav-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .adaptive-nav {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        @media (max-width: 767px) {
+            .adaptive-nav {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .adaptive-nav {
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        
+        .nav-item {
+            padding: 15px 30px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+            border-radius: 10px;
+            background: white;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        
+        .nav-item:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+        
+        .nav-item:active {
+            transform: translateY(-1px);
+        }
+        
+        .info-box {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .resolution-indicator {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .adaptive-nav {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Адаптивная навигация</h1>
+
+        <div class="nav-container">
+            <nav>
+                <ul class="adaptive-nav">
+                    <li><a href="#" class="nav-item">Главная</a></li>
+                    <li><a href="#" class="nav-item">О компании</a></li>
+                    <li><a href="#" class="nav-item">Услуги</a></li>
+                    <li><a href="#" class="nav-item">Портфолио</a></li>
+                    <li><a href="#" class="nav-item">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="resolution-indicator" id="resolutionIndicator">
+            Текущее разрешение: <span id="resolutionText"></span>
+        </div>
+
+        <div class="info-box">
+            <strong>Информация:</strong> При ширине экрана менее 768px меню становится вертикальным. При ширине 768px и более - меню горизонтальное. Измените размер окна браузера, чтобы увидеть эффект.
+        </div>
+    </div>
+
+    <script>
+        function updateResolution() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const indicator = document.getElementById('resolutionText');
+            const resolutionBox = document.getElementById('resolutionIndicator');
+
+            indicator.textContent = `${width}px × ${height}px`;
+
+
+            if (width < 768) {
+                resolutionBox.style.background = '#dc3545';
+                resolutionBox.innerHTML = `📱 Мобильная версия (${width}px × ${height}px)`;
+            } else if (width >= 768 && width < 1024) {
+                resolutionBox.style.background = '#ffc107';
+                resolutionBox.innerHTML = `📱 Планшетная версия (${width}px × ${height}px)`;
+            } else {
+                resolutionBox.style.background = '#28a745';
+                resolutionBox.innerHTML = `🖥️ Десктопная версия (${width}px × ${height}px)`;
+            }
+        }
+
+
+        window.addEventListener('load', updateResolution);
+        window.addEventListener('resize', updateResolution);
+    </script>
+</body>
+
+</html>
